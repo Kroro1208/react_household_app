@@ -2,7 +2,7 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
 import Report from './pages/Report';
-import Nomatch from './pages/Nomatch';
+import NotFound from './pages/NotFound';
 import AppLayout from './pages/components/layout/AppLayout';
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
         <Route path='/' element={<AppLayout />}>
           <Route index element={<Home />} />
           <Route path="/report" element={<Report />} />
-          <Route path="*" element={<Nomatch />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </Router>

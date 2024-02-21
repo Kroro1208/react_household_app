@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Nomatch = () => {
+const NotFound = () => {
     return (
         <div>
             <h1>ページが見つかりません</h1>
@@ -8,4 +8,4 @@ const Nomatch = () => {
     )
 }
 
-export default Nomatch
+export default NotFound
