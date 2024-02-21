@@ -31,7 +31,7 @@ const SideBar = ({ drawerWidth, mobileOpen, handleDrawerTransitionEnd, handleDra
     };
 
     const activeLinkStyle: CSSProperties = {
-        backgroundColor: "rgba(0, 0, 0, 0.08)"
+        backgroundColor: "rgba(30, 26, 26, 0.08)"
     };
 
     const drawer = (

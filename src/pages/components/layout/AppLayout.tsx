@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import { Outlet } from 'react-router-dom';
 import SideBar from '../common/SideBar';
 
+
 const drawerWidth = 240;
 
 export default function AppLayout() {
