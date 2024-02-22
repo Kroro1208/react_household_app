@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       {/* 左側 */}
-      <Box sx={{ flexGrow: 1, bgcolor: "pink" }}>
+      <Box sx={{ flexGrow: 1 }}>
         <MonthlySummary />
         <Calender />
       </Box>
