@@ -8,7 +8,12 @@ function MonthlySummary() {
         <Grid container spacing={{ xs: 1, sm: 2 }} mb={2}>
             {/* 収入 */}
             <Grid item xs={4} display={"flex"} flexDirection={'column'}>
-                <Card sx={{ bgcolor: "#8bc34a", color: "white", borderRadius: "10px", flexGrow: 1 }} >
+                <Card sx={{
+                    bgcolor: (theme) => theme.palette.incomeColor.main,
+                    color: "white",
+                    borderRadius: "10px",
+                    flexGrow: 1
+                }} >
                     <CardContent sx={{ padding: { xs: 1, sm: 2 } }}>
                         <Stack direction={"row"}>
                             <MovingIcon sx={{ fontsize: "2rem" }} />
@@ -23,7 +28,12 @@ function MonthlySummary() {
 
             {/* 支出 */}
             <Grid item xs={4} display={"flex"} flexDirection={'column'}>
-                <Card sx={{ bgcolor: "#ed4b82", color: "white", borderRadius: "10px", flexGrow: 1 }} >
+                <Card sx={{
+                    bgcolor: (theme) => theme.palette.expenseColor.main,
+                    color: "white",
+                    borderRadius: "10px",
+                    flexGrow: 1
+                }} >
                     <CardContent sx={{ padding: { xs: 1, sm: 2 } }}>
                         <Stack direction={"row"}>
                             <TrendingDownIcon sx={{ fontsize: "2rem" }} />
@@ -38,7 +48,12 @@ function MonthlySummary() {
 
             {/* 残高 */}
             <Grid item xs={4} display={"flex"} flexDirection={'column'}>
-                <Card sx={{ bgcolor: "#757575", color: "white", borderRadius: "10px", flexGrow: 1 }} >
+                <Card sx={{
+                    bgcolor: (theme) => theme.palette.balanceColor.main,
+                    color: "white",
+                    borderRadius: "10px",
+                    flexGrow: 1
+                }} >
                     <CardContent sx={{ padding: { xs: 1, sm: 2 } }}>
                         <Stack direction={"row"}>
                             <AccountBalanceIcon sx={{ fontsize: "2rem" }} />
