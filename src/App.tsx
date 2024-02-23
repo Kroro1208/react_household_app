@@ -13,12 +13,17 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from "./firebase";
 
 function App() {
+
+  // Firebaseエラーかどうかを判断する型ガードを実装
+  function isFireStoreError(error: unknown): error is { code: string, message: string } {
+    return typeof error === "object" && error !== null && "code" in error
+  }
+
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "Transactions"))
-
         const transactionsData = querySnapshot.docs.map((doc) => {
           return {
             ...doc.data(),
@@ -28,7 +33,13 @@ function App() {
         console.log(transactionsData)
         setTransactions(transactionsData);
       } catch (error) {
-
+        if (isFireStoreError(error)) {
+          console.log("Firebaseエラー", error);
+          // console.log("Firebaseエラーメッセージ", error.message);
+          // console.log("Firebaseエラーコード", error.code);
+        } else {
+          console.log("一般的なエラー:", error);
+        }
       }
     }
     fetchTransactions();
