@@ -2,8 +2,14 @@ import { Card, CardContent, Grid, Stack, Typography } from '@mui/material'
 import MovingIcon from '@mui/icons-material/Moving';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import { Transaction } from '../../types';
 
-function MonthlySummary() {
+interface monthlyTransactions {
+    monthlyTransactions: Transaction[]
+}
+
+function MonthlySummary({ monthlyTransactions }: monthlyTransactions) {
+    console.log(monthlyTransactions);
     return (
         <Grid container spacing={{ xs: 1, sm: 2 }} mb={2}>
             {/* 収入 */}

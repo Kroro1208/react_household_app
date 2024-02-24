@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { Transaction } from "./types/index";
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from "./firebase";
+import { formatMonth } from './utils/formatting';
 
 function App() {
 
@@ -20,6 +21,11 @@ function App() {
   }
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
+
+
+
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
@@ -45,13 +51,20 @@ function App() {
     fetchTransactions();
   }, [])
 
+  //transactionから今月のデータのみを取得
+  const monthlyTransactions = transactions.filter((transaction) => {
+    return transaction.date.startsWith(formatMonth(currentMonth));
+  })
+
+  console.log(monthlyTransactions)
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
         <Routes>
           <Route path='/' element={<AppLayout />}>
-            <Route index element={<Home />} />
+            <Route index element={<Home monthlyTransactions={monthlyTransactions} />} />
             <Route path="/report" element={<Report />} />
             <Route path="*" element={<NotFound />} />
           </Route>
