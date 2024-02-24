@@ -3,13 +3,14 @@ import MovingIcon from '@mui/icons-material/Moving';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { Transaction } from '../../types';
+import { financeCalc } from '../../utils/financeCalc';
 
 interface monthlyTransactions {
     monthlyTransactions: Transaction[]
 }
 
 function MonthlySummary({ monthlyTransactions }: monthlyTransactions) {
-    console.log(monthlyTransactions);
+    const { income, expense, balance } = financeCalc(monthlyTransactions);
     return (
         <Grid container spacing={{ xs: 1, sm: 2 }} mb={2}>
             {/* 収入 */}
@@ -27,7 +28,7 @@ function MonthlySummary({ monthlyTransactions }: monthlyTransactions) {
                         </Stack>
                         <Typography textAlign={"center"} variant='h5' fontWeight={"fontWeightBold"}
                             sx={{ wordBreak: "break-word", fontSize: { xs: ".8rem", sm: "1rem", md: "1.2rem" } }}
-                        >500円</Typography>
+                        >¥{income}</Typography>
                     </CardContent>
                 </Card>
             </Grid>
@@ -47,7 +48,7 @@ function MonthlySummary({ monthlyTransactions }: monthlyTransactions) {
                         </Stack>
                         <Typography textAlign={"center"} variant='h5' fontWeight={"fontWeightBold"}
                             sx={{ wordBreak: "break-word", fontSize: { xs: ".8rem", sm: "1rem", md: "1.2rem" } }}
-                        >500円</Typography>
+                        >¥{expense}</Typography>
                     </CardContent>
                 </Card>
             </Grid>
@@ -67,7 +68,7 @@ function MonthlySummary({ monthlyTransactions }: monthlyTransactions) {
                         </Stack>
                         <Typography textAlign={"center"} variant='h5' fontWeight={"fontWeightBold"}
                             sx={{ wordBreak: "break-word", fontSize: { xs: ".8rem", sm: "1rem", md: "1.2rem" } }}
-                        >500円</Typography>
+                        >¥{balance}</Typography>
                     </CardContent>
                 </Card>
             </Grid>
