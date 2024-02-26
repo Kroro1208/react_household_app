@@ -27,3 +27,10 @@ export interface Balance {
   expense: number;
   balance: number;
 }
+
+export interface CalendarContent {
+  start: string,
+  income: string,
+  expense: string,
+  balance: string
+}

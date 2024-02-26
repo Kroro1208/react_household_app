@@ -1,9 +1,8 @@
 import { Box } from '@mui/material'
-import React from 'react'
-import MonthlySummary from './components/MonthlySummary'
-import Calender from './components/Calender'
-import Transaction from './components/Transaction'
-import TransactionForm from './components/TransactionForm'
+import MonthlySummary from '../components/MonthlySummary'
+import Calendar from '../components/Calendar'
+import Transaction from '../components/Transaction'
+import TransactionForm from '../components/TransactionForm'
 import { Transaction as TransactionType } from '../types'
 
 interface HomeProps {
@@ -16,7 +15,7 @@ const Home = ({ monthlyTransactions }: HomeProps) => {
       {/* 左側 */}
       <Box sx={{ flexGrow: 1 }}>
         <MonthlySummary monthlyTransactions={monthlyTransactions} />
-        <Calender />
+        <Calendar monthlyTransactions={monthlyTransactions}/>
       </Box>
       {/* 右側 */}
       <Box>

@@ -2,8 +2,8 @@ import { Card, CardContent, Grid, Stack, Typography } from '@mui/material'
 import MovingIcon from '@mui/icons-material/Moving';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import { Transaction } from '../../types';
-import { financeCalc } from '../../utils/financeCalc';
+import { Transaction } from '../types';
+import { financeCalc } from '../utils/financeCalc';
 
 interface monthlyTransactions {
     monthlyTransactions: Transaction[]

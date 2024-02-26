@@ -3,7 +3,7 @@ import './App.css';
 import Home from './pages/Home';
 import Report from './pages/Report';
 import NotFound from './pages/NotFound';
-import AppLayout from './pages/components/layout/AppLayout';
+import AppLayout from './components/layout/AppLayout';
 import { ThemeProvider } from '@emotion/react';
 import { theme } from './theme/theme';
 import { CssBaseline } from '@mui/material';
@@ -22,9 +22,6 @@ function App() {
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
-
-
-
 
   useEffect(() => {
     const fetchTransactions = async () => {
