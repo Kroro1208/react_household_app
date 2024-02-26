@@ -2,7 +2,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from "@fullcalendar/daygrid"
 import jaLocale from "@fullcalendar/core/locales/ja"
 import "../calendar.css"
-import { EventContentArg } from '@fullcalendar/core'
+import { DatesSetArg, EventContentArg } from '@fullcalendar/core'
 import { Balance, CalendarContent, Transaction } from '../types'
 import { calcDailyBalance } from '../utils/financeCalc'
 import { formatCurrency } from '../utils/formatting'
@@ -10,9 +10,11 @@ import { formatCurrency } from '../utils/formatting'
 
 interface CalendarProps {
     monthlyTransactions: Transaction[]
+    setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>
 }
 
-const Calendar = ({ monthlyTransactions }: CalendarProps) => {
+const Calendar = (
+    { monthlyTransactions, setCurrentMonth }: CalendarProps) => {
 
     const dailyBalance = calcDailyBalance(monthlyTransactions);
     console.log(dailyBalance);
@@ -25,7 +27,7 @@ const Calendar = ({ monthlyTransactions }: CalendarProps) => {
                 start: date,
                 income: formatCurrency(income),
                 expense: formatCurrency(expense),
-                balance: formatCurrency(balance)
+                balance: formatCurrency(balance),
             }
         });
     }
@@ -49,6 +51,11 @@ const Calendar = ({ monthlyTransactions }: CalendarProps) => {
         )
     }
 
+    const handleDateSet = (dateSetInfo: DatesSetArg) => {
+        console.log(dateSetInfo);
+        setCurrentMonth(dateSetInfo.view.currentStart)
+    }
+
     return (
         <FullCalendar
             locale={jaLocale}
@@ -56,6 +63,7 @@ const Calendar = ({ monthlyTransactions }: CalendarProps) => {
             initialView="dayGridMonth"
             events={calendarEvents}
             eventContent={renderEventContent}
+            datesSet={handleDateSet}
         />
     )
 }
