@@ -23,6 +23,7 @@ function App() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
+  // Firebaseからデータを取得
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
@@ -34,7 +35,7 @@ function App() {
           } as Transaction // 型アサーションでエラー解消
         });
         console.log(transactionsData)
-        setTransactions(transactionsData);
+        setTransactions(transactionsData); // 取得したデータをセット
       } catch (error) {
         if (isFireStoreError(error)) {
           console.log("Firebaseエラー", error);
