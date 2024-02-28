@@ -17,11 +17,11 @@ const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
   const today = format(new Date(), "yyyy-MM-dd");
   const [currentDay, setCurrentDay] = useState(today);
 
-  const DailyTransactions = monthlyTransactions.filter((transaction) => {
+  const dailyTransactions = monthlyTransactions.filter((transaction) => {
     return transaction.date === currentDay;
   });
 
-  console.log(DailyTransactions);
+  console.log(dailyTransactions);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -34,7 +34,7 @@ const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
       <Box>
         <Transaction />
         <TransactionForm />
-        <TransactionMenu />
+        <TransactionMenu dailyTransactions={dailyTransactions} currentDay={currentDay}/>
       </Box>
     </Box>
   )
