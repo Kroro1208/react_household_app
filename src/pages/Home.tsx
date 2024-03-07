@@ -52,7 +52,7 @@ const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
       {/* 右側 */}
       <Box>
         <Transaction />
-        <TransactionForm onCloseForm={closeForm} isEntryDrawerOpen={isEntryDrawerOpen} />
+        <TransactionForm onCloseForm={closeForm} isEntryDrawerOpen={isEntryDrawerOpen} currentDay={currentDay}/>
         <TransactionMenu dailyTransactions={dailyTransactions} currentDay={currentDay} openForm={openForm}/>
       </Box>
     </Box>
