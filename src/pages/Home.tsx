@@ -28,7 +28,7 @@ const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
       {/* 左側 */}
       <Box sx={{ flexGrow: 1 }}>
         <MonthlySummary monthlyTransactions={monthlyTransactions} />
-        <Calendar monthlyTransactions={monthlyTransactions} setCurrentMonth={setCurrentMonth} setCurrentDay={setCurrentDay} />
+        <Calendar monthlyTransactions={monthlyTransactions} setCurrentMonth={setCurrentMonth} setCurrentDay={setCurrentDay} currentDay={currentDay}/>
       </Box>
       {/* 右側 */}
       <Box>
