@@ -14,6 +14,8 @@ interface HomeProps {
 }
 
 const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
+  const [isEntryDrawerOpen, setIsEntryDrawerOpen] = useState(false);
+
   const today = format(new Date(), "yyyy-MM-dd");
   const [currentDay, setCurrentDay] = useState(today);
 
@@ -23,18 +25,35 @@ const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
 
   console.log(dailyTransactions);
 
+  // 内訳フォームをデフォルトでは閉じた状態にしておく
+  const closeForm = () => {
+    setIsEntryDrawerOpen(!isEntryDrawerOpen);
+  };
+
+  // 内訳フォームの開閉処理
+  const openForm = ()=> {
+    setIsEntryDrawerOpen(!isEntryDrawerOpen);
+  }
+
+
+
   return (
     <Box sx={{ display: 'flex' }}>
       {/* 左側 */}
       <Box sx={{ flexGrow: 1 }}>
         <MonthlySummary monthlyTransactions={monthlyTransactions} />
-        <Calendar monthlyTransactions={monthlyTransactions} setCurrentMonth={setCurrentMonth} setCurrentDay={setCurrentDay} currentDay={currentDay}/>
+        <Calendar monthlyTransactions={monthlyTransactions}
+          setCurrentMonth={setCurrentMonth}
+          setCurrentDay={setCurrentDay}
+          currentDay={currentDay}
+          today={today} />
+
       </Box>
       {/* 右側 */}
       <Box>
         <Transaction />
-        <TransactionForm />
-        <TransactionMenu dailyTransactions={dailyTransactions} currentDay={currentDay}/>
+        <TransactionForm onCloseForm={closeForm} isEntryDrawerOpen={isEntryDrawerOpen} />
+        <TransactionMenu dailyTransactions={dailyTransactions} currentDay={currentDay} openForm={openForm}/>
       </Box>
     </Box>
   )
