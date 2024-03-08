@@ -12,8 +12,24 @@ import {
 
 import CloseIcon from "@mui/icons-material/Close"; // 閉じるボタン用のアイコン
 import FastfoodIcon from "@mui/icons-material/Fastfood"; //食事アイコン
+import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
+import HomeWorkIcon from '@mui/icons-material/HomeWork';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import LocalAirportIcon from '@mui/icons-material/LocalAirport';
+import SchoolIcon from '@mui/icons-material/School';
+import ChildCareIcon from '@mui/icons-material/ChildCare';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import VaccinesIcon from '@mui/icons-material/Vaccines';
+import PetsIcon from '@mui/icons-material/Pets';
+import MoneyIcon from '@mui/icons-material/Money';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import PaidIcon from '@mui/icons-material/Paid';
+
+
 import { Controller, useForm, SubmitHandler } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { ExpenseCategory, IncomeCategory } from "../types";
 
 interface TransactionFormProps {
   onCloseForm: () => void;
@@ -22,6 +38,11 @@ interface TransactionFormProps {
 }
 
 type incomeExpense = "income" | "expense";
+
+interface CategoryItem {
+  label: IncomeCategory | ExpenseCategory;
+  icon: JSX.Element;
+}
 
 // interface IFormInput {
 //   type: string;
@@ -45,14 +66,46 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay }: Transac
 
   // const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data)
 
+  const expenseCategories: CategoryItem[] = [
+    { label: "食費", icon: < FastfoodIcon fontSize="small" /> },
+    { label: "日用品", icon: < LocalGroceryStoreIcon fontSize="small" /> },
+    { label: "住居費", icon: < HomeWorkIcon fontSize="small" /> },
+    { label: "交際費", icon: < Diversity3Icon fontSize="small" /> },
+    { label: "趣味", icon: < SportsEsportsIcon fontSize="small" /> },
+    { label: "旅費", icon: < LocalAirportIcon fontSize="small" /> },
+    { label: "教育費", icon: < ChildCareIcon fontSize="small" /> },
+    { label: "保健", icon: < LocalHospitalIcon fontSize="small" /> },
+    { label: "医療費", icon: < VaccinesIcon fontSize="small" /> },
+    { label: "ペット", icon: < PetsIcon fontSize="small" /> },
+    { label: "勉強", icon: < SchoolIcon fontSize="small" /> },
+  ]
+
+  const incomeCategories: CategoryItem[] = [
+    { label: "給料", icon: < AttachMoneyIcon fontSize="small" /> },
+    { label: "お小遣い", icon: < MoneyIcon fontSize="small" /> },
+    { label: "副収入", icon: < PaidIcon fontSize="small" /> },
+
+  ]
+
+  const [categories, setCategories] = useState(expenseCategories);
+
   const incomeExpenseToggle = (type: incomeExpense) => {
     setValue("type", type);
   };
 
+  // 収支タイプを監視
   const currentType = watch("type");
+
   useEffect(() => {
     setValue('date', currentDay);
   }, [currentDay]);
+
+  useEffect(() => {
+    const newCategories = currentType === "expense" ? expenseCategories : incomeCategories;
+    setCategories(newCategories);
+  }, [currentType])
+
+
 
 
   const formWidth = 320;
@@ -135,12 +188,14 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay }: Transac
             control={control}
             render={({ field }) => (
               <TextField {...field} id="カテゴリ" label="カテゴリ" select>
-                <MenuItem value={"食費"}>
-                  <ListItemIcon>
-                    <FastfoodIcon />
-                  </ListItemIcon>
-                  食費
-                </MenuItem>
+                {categories.map((category) => (
+                  <MenuItem value={category.label}>
+                    <ListItemIcon>
+                      {category.icon}
+                    </ListItemIcon>
+                    {category.label}
+                  </MenuItem>
+                ))}
               </TextField>
             )}
           />
