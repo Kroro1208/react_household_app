@@ -25,11 +25,13 @@ import PetsIcon from '@mui/icons-material/Pets';
 import MoneyIcon from '@mui/icons-material/Money';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import PaidIcon from '@mui/icons-material/Paid';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 
 import { Controller, useForm, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { ExpenseCategory, IncomeCategory } from "../types";
+import { transactionSchema } from "../validations/schema";
 
 interface TransactionFormProps {
   onCloseForm: () => void;
@@ -54,15 +56,18 @@ interface CategoryItem {
 
 const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay }: TransactionFormProps) => {
   // const { control, handleSubmit, formState: { errors } } = useForm<IFormInput>({
-  const { control, setValue, watch } = useForm({
+  const { control, setValue, watch, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       type: "expense",
       date: currentDay,
       amount: 0,
       category: "",
       content: ""
-    }
+    },
+    resolver: zodResolver(transactionSchema),
   });
+
+  console.log(errors);
 
   // const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data)
 
@@ -105,7 +110,9 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay }: Transac
     setCategories(newCategories);
   }, [currentType])
 
-
+  const onSubmit = (data: any) => {
+    console.log(data);
+  }
 
 
   const formWidth = 320;
@@ -144,8 +151,8 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay }: Transac
         </IconButton>
       </Box>
       {/* フォーム要素 */}
-      {/* <Box component={"form"} onSubmit={handleSubmit(onSubmit)}> */}
-      <Box component={"form"}>
+
+      <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           {/* 収支切り替えボタン */}
           <Controller
@@ -179,6 +186,8 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay }: Transac
                 InputLabelProps={{
                   shrink: true,
                 }}
+                error={!!errors.date}
+                helperText={errors.date?.message}
               />
             )}
           />
@@ -187,9 +196,12 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay }: Transac
             name="category"
             control={control}
             render={({ field }) => (
-              <TextField {...field} id="カテゴリ" label="カテゴリ" select>
-                {categories.map((category) => (
-                  <MenuItem value={category.label}>
+              <TextField
+                error={!!errors.category}
+                helperText={errors.category?.message}
+                {...field} id="カテゴリ" label="カテゴリ" select>
+                {categories.map((category, index) => (
+                  <MenuItem value={category.label} key={index}>
                     <ListItemIcon>
                       {category.icon}
                     </ListItemIcon>
@@ -204,7 +216,10 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay }: Transac
             name="amount"
             control={control}
             render={({ field }) => (
-              <TextField {...field} label="金額" type="number" value={field.value === 0 ? "" : field.value}
+              <TextField
+                error={!!errors.amount}
+                helperText={errors.amount?.message}
+                {...field} label="金額" type="number" value={field.value === 0 ? "" : field.value}
                 onChange={(e) => {
                   const newValue = parseInt(e.target.value, 10) || 0;
                   field.onChange(newValue);
@@ -216,7 +231,10 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay }: Transac
             name="content"
             control={control}
             render={({ field }) => (
-              <TextField {...field} label="内容" type="text" />
+              <TextField
+                error={!!errors.content}
+                helperText={errors.content?.message}
+                {...field} label="内容" type="text" />
             )}
           />
 
