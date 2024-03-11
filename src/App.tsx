@@ -9,7 +9,7 @@ import { theme } from './theme/theme';
 import { CssBaseline } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Transaction } from "./types/index";
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from "./firebase";
 import { formatMonth } from './utils/formatting';
 import { Schema } from './validations/schema';
@@ -23,7 +23,6 @@ function App() {
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
 
   // Firebaseからデータを取得
   useEffect(() => {
@@ -78,6 +77,22 @@ function App() {
       };
     }
   };
+
+  const onDeleteTransaction = async (transactionId: string) => {
+    try {
+      await deleteDoc(doc(db, 'Transactions', transactionId));
+      // 削除ボタンを押された取引以外の記録を取得してstateで管理して表示させる
+      const filteredTransactions = transactions.filter((transaction) => transaction.id !== transactionId);
+      setTransactions(filteredTransactions);
+    } catch (error: any) {
+      if (isFireStoreError(error)) {
+        console.error('firestore エラー:', error);
+      } else {
+        console.error('一般エラー:', error);
+      };
+    }
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -85,13 +100,12 @@ function App() {
         <Routes>
           <Route path='/' element={<AppLayout />}>
             <Route index element={
-            <Home
-            monthlyTransactions={monthlyTransactions}
-            setCurrentMonth={setCurrentMonth}
-            onSaveTransaction={onSaveTransaction}
-            selectedTransaction={selectedTransaction}
-            setSelectedTransaction={setSelectedTransaction}
-            />} />
+              <Home
+                monthlyTransactions={monthlyTransactions}
+                setCurrentMonth={setCurrentMonth}
+                onSaveTransaction={onSaveTransaction}
+                onDeleteTransaction={onDeleteTransaction}
+              />} />
             <Route path="/report" element={<Report />} />
             <Route path="*" element={<NotFound />} />
           </Route>

@@ -39,6 +39,8 @@ interface TransactionFormProps {
   currentDay: string;
   onSaveTransaction: (transaction: Schema) => Promise<void>;
   selectedTransaction: Transaction | null;
+  onDeleteTransaction: (transactionId: string) => Promise<void>
+  setSelectedTransaction: React.Dispatch<React.SetStateAction<Transaction | null>>
 
 }
 
@@ -57,7 +59,15 @@ interface CategoryItem {
 //   content: string;
 // }
 
-const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay, onSaveTransaction, selectedTransaction }: TransactionFormProps) => {
+const TransactionForm = ({
+  onCloseForm,
+  isEntryDrawerOpen,
+  currentDay,
+  onSaveTransaction,
+  selectedTransaction,
+  onDeleteTransaction,
+  setSelectedTransaction
+}: TransactionFormProps) => {
   // const { control, handleSubmit, formState: { errors } } = useForm<IFormInput>({
   const { control, setValue, watch, handleSubmit, formState: { errors }, reset } = useForm<Schema>({
     defaultValues: {
@@ -133,11 +143,27 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay, onSaveTra
       setValue('amount', selectedTransaction.amount);
       setValue('category', selectedTransaction.category);
       setValue('content', selectedTransaction.content);
+    } else {
+      reset({
+        type: "expense",
+        date: currentDay,
+        amount: 0,
+        category: "",
+        content: ""
+      });
     }
   }, [selectedTransaction]);
 
 
   const formWidth = 320;
+
+  const handleDelete = () => {
+    if (selectedTransaction) {
+      onDeleteTransaction(selectedTransaction.id);
+      setSelectedTransaction(null)
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -261,12 +287,18 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay, onSaveTra
           />
 
           {/* 保存ボタン */}
-          <Button type="submit" variant="contained" color={currentType === "income" ? "primary" : "error"} fullWidth>
+          <Button type="submit" variant="contained" color={"success"} fullWidth>
             保存
           </Button>
+
+          {selectedTransaction && (
+            <Button onClick={handleDelete} variant="contained" color={"error"} fullWidth>
+              削除
+            </Button>
+          )}
         </Stack>
       </Box>
-    </Box>
+    </Box >
   );
 };
 export default TransactionForm;

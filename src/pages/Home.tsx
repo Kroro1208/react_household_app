@@ -13,15 +13,15 @@ interface HomeProps {
   monthlyTransactions: TransactionType[],
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>,
   onSaveTransaction: (transaction: Schema) => Promise<void>,
-  selectedTransaction: TransactionType | null,
-  setSelectedTransaction: React.Dispatch<React.SetStateAction<TransactionType | null>>
+  onDeleteTransaction: (transactionId: string) => Promise<void>
 }
 
-const Home = ({ monthlyTransactions, setCurrentMonth, onSaveTransaction, selectedTransaction, setSelectedTransaction }: HomeProps) => {
+const Home = ({ monthlyTransactions, setCurrentMonth, onSaveTransaction, onDeleteTransaction }: HomeProps) => {
   const [isEntryDrawerOpen, setIsEntryDrawerOpen] = useState(false);
-
   const today = format(new Date(), "yyyy-MM-dd");
   const [currentDay, setCurrentDay] = useState(today);
+  const [selectedTransaction, setSelectedTransaction] = useState<TransactionType | null>(null);
+
 
   const dailyTransactions = monthlyTransactions.filter((transaction) => {
     return transaction.date === currentDay;
@@ -32,11 +32,16 @@ const Home = ({ monthlyTransactions, setCurrentMonth, onSaveTransaction, selecte
   // 内訳フォームをデフォルトでは閉じた状態にしておく
   const closeForm = () => {
     setIsEntryDrawerOpen(!isEntryDrawerOpen);
+    setSelectedTransaction(null);
   };
 
   // 内訳フォームの開閉処理
   const openForm = () => {
-    setIsEntryDrawerOpen(!isEntryDrawerOpen);
+    if (selectedTransaction) {
+      setSelectedTransaction(null);
+    } else {
+      setIsEntryDrawerOpen(!isEntryDrawerOpen);
+    }
   }
 
   // 取引が選択されたときの処理
@@ -62,8 +67,20 @@ const Home = ({ monthlyTransactions, setCurrentMonth, onSaveTransaction, selecte
       {/* 右側 */}
       <Box>
         <Transaction />
-        <TransactionForm onCloseForm={closeForm} isEntryDrawerOpen={isEntryDrawerOpen} currentDay={currentDay} onSaveTransaction={onSaveTransaction} selectedTransaction={selectedTransaction}/>
-        <TransactionMenu dailyTransactions={dailyTransactions} currentDay={currentDay} openForm={openForm} onSelectTransaction={onSelectTransaction} />
+        <TransactionForm
+          onCloseForm={closeForm}
+          isEntryDrawerOpen={isEntryDrawerOpen}
+          currentDay={currentDay}
+          onSaveTransaction={onSaveTransaction}
+          selectedTransaction={selectedTransaction}
+          onDeleteTransaction={onDeleteTransaction}
+          setSelectedTransaction={setSelectedTransaction}
+          />
+        <TransactionMenu
+          dailyTransactions={dailyTransactions}
+          currentDay={currentDay}
+          openForm={openForm}
+          onSelectTransaction={onSelectTransaction} />
       </Box>
     </Box>
   )
