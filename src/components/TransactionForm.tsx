@@ -31,12 +31,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { ExpenseCategory, IncomeCategory } from "../types";
-import { transactionSchema } from "../validations/schema";
+import { Schema, transactionSchema } from "../validations/schema";
 
 interface TransactionFormProps {
   onCloseForm: () => void;
   isEntryDrawerOpen: boolean;
-  currentDay: string
+  currentDay: string;
+  onSaveTransaction: (transaction: Schema) => Promise<void>
 }
 
 type incomeExpense = "income" | "expense";
@@ -54,9 +55,9 @@ interface CategoryItem {
 //   content: string;
 // }
 
-const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay }: TransactionFormProps) => {
+const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay, onSaveTransaction }: TransactionFormProps) => {
   // const { control, handleSubmit, formState: { errors } } = useForm<IFormInput>({
-  const { control, setValue, watch, handleSubmit, formState: { errors } } = useForm({
+  const { control, setValue, watch, handleSubmit, formState: { errors } } = useForm<Schema>({
     defaultValues: {
       type: "expense",
       date: currentDay,
@@ -68,8 +69,6 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay }: Transac
   });
 
   console.log(errors);
-
-  // const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data)
 
   const expenseCategories: CategoryItem[] = [
     { label: "食費", icon: < FastfoodIcon fontSize="small" /> },
@@ -110,8 +109,9 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay }: Transac
     setCategories(newCategories);
   }, [currentType])
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  // 送信処理ボタン
+  const onSubmit: SubmitHandler<Schema> = (data) => {
+    onSaveTransaction(data);
   }
 
 

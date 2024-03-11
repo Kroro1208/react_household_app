@@ -9,9 +9,10 @@ import { theme } from './theme/theme';
 import { CssBaseline } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Transaction } from "./types/index";
-import { collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { db } from "./firebase";
 import { formatMonth } from './utils/formatting';
+import { Schema } from './validations/schema';
 
 function App() {
 
@@ -54,15 +55,35 @@ function App() {
     return transaction.date.startsWith(formatMonth(currentMonth));
   })
 
-  console.log(monthlyTransactions)
+  // firebaseにデータを保存する処理
+  const onSaveTransaction = async (transaction: Schema) => {
+    console.log(transaction);
+    try {
+      // Add a new document with a generated id.
+      const docRef = await addDoc(collection(db, "Transactions"), transaction);
+      console.log("Document written with ID: ", docRef.id);
 
+      const newTransaction = {
+        id: docRef.id,
+        ...transaction
+      } as Transaction;
+
+      setTransactions((prevTransactions)=>[...prevTransactions, newTransaction]);
+    } catch (error: any) {
+      if (isFireStoreError(error)) {
+        console.error('firestoreエラー:', error);
+      } else {
+        console.error('一般エラー:', error);
+      };
+    }
+  };
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
         <Routes>
           <Route path='/' element={<AppLayout />}>
-            <Route index element={<Home monthlyTransactions={monthlyTransactions} setCurrentMonth={setCurrentMonth}/>} />
+            <Route index element={<Home monthlyTransactions={monthlyTransactions} setCurrentMonth={setCurrentMonth} onSaveTransaction={onSaveTransaction} />} />
             <Route path="/report" element={<Report />} />
             <Route path="*" element={<NotFound />} />
           </Route>
