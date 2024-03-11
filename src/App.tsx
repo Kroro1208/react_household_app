@@ -23,6 +23,7 @@ function App() {
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
 
   // Firebaseからデータを取得
   useEffect(() => {
@@ -68,7 +69,7 @@ function App() {
         ...transaction
       } as Transaction;
 
-      setTransactions((prevTransactions)=>[...prevTransactions, newTransaction]);
+      setTransactions((prevTransactions) => [...prevTransactions, newTransaction]);
     } catch (error: any) {
       if (isFireStoreError(error)) {
         console.error('firestoreエラー:', error);
@@ -83,7 +84,14 @@ function App() {
       <Router>
         <Routes>
           <Route path='/' element={<AppLayout />}>
-            <Route index element={<Home monthlyTransactions={monthlyTransactions} setCurrentMonth={setCurrentMonth} onSaveTransaction={onSaveTransaction} />} />
+            <Route index element={
+            <Home
+            monthlyTransactions={monthlyTransactions}
+            setCurrentMonth={setCurrentMonth}
+            onSaveTransaction={onSaveTransaction}
+            selectedTransaction={selectedTransaction}
+            setSelectedTransaction={setSelectedTransaction}
+            />} />
             <Route path="/report" element={<Report />} />
             <Route path="*" element={<NotFound />} />
           </Route>

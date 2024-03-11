@@ -12,10 +12,12 @@ import { Schema } from '../validations/schema'
 interface HomeProps {
   monthlyTransactions: TransactionType[],
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>,
-  onSaveTransaction: (transaction: Schema) => Promise<void>
+  onSaveTransaction: (transaction: Schema) => Promise<void>,
+  selectedTransaction: TransactionType | null,
+  setSelectedTransaction: React.Dispatch<React.SetStateAction<TransactionType | null>>
 }
 
-const Home = ({ monthlyTransactions, setCurrentMonth, onSaveTransaction }: HomeProps) => {
+const Home = ({ monthlyTransactions, setCurrentMonth, onSaveTransaction, selectedTransaction, setSelectedTransaction }: HomeProps) => {
   const [isEntryDrawerOpen, setIsEntryDrawerOpen] = useState(false);
 
   const today = format(new Date(), "yyyy-MM-dd");
@@ -33,8 +35,14 @@ const Home = ({ monthlyTransactions, setCurrentMonth, onSaveTransaction }: HomeP
   };
 
   // 内訳フォームの開閉処理
-  const openForm = ()=> {
+  const openForm = () => {
     setIsEntryDrawerOpen(!isEntryDrawerOpen);
+  }
+
+  // 取引が選択されたときの処理
+  const onSelectTransaction = (transaction: TransactionType) => {
+    setIsEntryDrawerOpen(true);
+    setSelectedTransaction(transaction);
   }
 
 
@@ -54,8 +62,8 @@ const Home = ({ monthlyTransactions, setCurrentMonth, onSaveTransaction }: HomeP
       {/* 右側 */}
       <Box>
         <Transaction />
-        <TransactionForm onCloseForm={closeForm} isEntryDrawerOpen={isEntryDrawerOpen} currentDay={currentDay} onSaveTransaction={onSaveTransaction}/>
-        <TransactionMenu dailyTransactions={dailyTransactions} currentDay={currentDay} openForm={openForm}/>
+        <TransactionForm onCloseForm={closeForm} isEntryDrawerOpen={isEntryDrawerOpen} currentDay={currentDay} onSaveTransaction={onSaveTransaction} selectedTransaction={selectedTransaction}/>
+        <TransactionMenu dailyTransactions={dailyTransactions} currentDay={currentDay} openForm={openForm} onSelectTransaction={onSelectTransaction} />
       </Box>
     </Box>
   )

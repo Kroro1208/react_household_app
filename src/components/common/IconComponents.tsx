@@ -27,7 +27,7 @@ const IconComponents: Record<IncomeCategory | ExpenseCategory, JSX.Element> = {
     医療費: <VaccinesIcon fontSize="small" />,
     ペット: <PetsIcon fontSize="small" />,
     副収入: <PaidIcon fontSize="small" />,
-    給料: <AttachMoneyIcon fontSize="small" />,
+    給与: <AttachMoneyIcon fontSize="small" />,
     お小遣い: <MoneyIcon fontSize="small" />
 };
 

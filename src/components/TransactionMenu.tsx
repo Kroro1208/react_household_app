@@ -24,9 +24,10 @@ interface TransactionProps {
   dailyTransactions: Transaction[];
   currentDay: string;
   openForm: () => void;
+  onSelectTransaction: (transaction: Transaction) => void;
 }
 
-const TransactionMenu = ({ dailyTransactions, currentDay, openForm }: TransactionProps) => {
+const TransactionMenu = ({ dailyTransactions, currentDay, openForm, onSelectTransaction }: TransactionProps) => {
   const menuDrawerWidth = 320;
   return (
     <Drawer
@@ -72,6 +73,7 @@ const TransactionMenu = ({ dailyTransactions, currentDay, openForm }: Transactio
               {dailyTransactions.map((transaction) => (
                 <ListItem disablePadding>
                   <Card
+                    onClick={() => onSelectTransaction(transaction)}
                     sx={{
                       width: "100%",
                       backgroundColor: transaction.type === "income" ? (theme) => theme.palette.incomeColor.light : (theme) => theme.palette.expenseColor.light

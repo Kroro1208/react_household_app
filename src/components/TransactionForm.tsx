@@ -30,14 +30,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Controller, useForm, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { ExpenseCategory, IncomeCategory } from "../types";
+import { ExpenseCategory, IncomeCategory, Transaction } from "../types";
 import { Schema, transactionSchema } from "../validations/schema";
 
 interface TransactionFormProps {
   onCloseForm: () => void;
   isEntryDrawerOpen: boolean;
   currentDay: string;
-  onSaveTransaction: (transaction: Schema) => Promise<void>
+  onSaveTransaction: (transaction: Schema) => Promise<void>;
+  selectedTransaction: Transaction | null;
+
 }
 
 type incomeExpense = "income" | "expense";
@@ -55,7 +57,7 @@ interface CategoryItem {
 //   content: string;
 // }
 
-const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay, onSaveTransaction }: TransactionFormProps) => {
+const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay, onSaveTransaction, selectedTransaction }: TransactionFormProps) => {
   // const { control, handleSubmit, formState: { errors } } = useForm<IFormInput>({
   const { control, setValue, watch, handleSubmit, formState: { errors }, reset } = useForm<Schema>({
     defaultValues: {
@@ -85,7 +87,7 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay, onSaveTra
   ]
 
   const incomeCategories: CategoryItem[] = [
-    { label: "給料", icon: < AttachMoneyIcon fontSize="small" /> },
+    { label: "給与", icon: < AttachMoneyIcon fontSize="small" /> },
     { label: "お小遣い", icon: < MoneyIcon fontSize="small" /> },
     { label: "副収入", icon: < PaidIcon fontSize="small" /> },
 
@@ -123,6 +125,16 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay, onSaveTra
       content: ""
     });
   }
+
+  useEffect(() => {
+    if (selectedTransaction) {
+      setValue('type', selectedTransaction.type);
+      setValue('date', selectedTransaction.date);
+      setValue('amount', selectedTransaction.amount);
+      setValue('category', selectedTransaction.category);
+      setValue('content', selectedTransaction.content);
+    }
+  }, [selectedTransaction]);
 
 
   const formWidth = 320;
