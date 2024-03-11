@@ -57,7 +57,7 @@ interface CategoryItem {
 
 const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay, onSaveTransaction }: TransactionFormProps) => {
   // const { control, handleSubmit, formState: { errors } } = useForm<IFormInput>({
-  const { control, setValue, watch, handleSubmit, formState: { errors } } = useForm<Schema>({
+  const { control, setValue, watch, handleSubmit, formState: { errors }, reset } = useForm<Schema>({
     defaultValues: {
       type: "expense",
       date: currentDay,
@@ -93,8 +93,11 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay, onSaveTra
 
   const [categories, setCategories] = useState(expenseCategories);
 
+  // 収支タイプを切り替える
   const incomeExpenseToggle = (type: incomeExpense) => {
     setValue("type", type);
+    setValue("category", "");
+
   };
 
   // 収支タイプを監視
@@ -112,6 +115,13 @@ const TransactionForm = ({ onCloseForm, isEntryDrawerOpen, currentDay, onSaveTra
   // 送信処理ボタン
   const onSubmit: SubmitHandler<Schema> = (data) => {
     onSaveTransaction(data);
+    reset({
+      type: "expense",
+      date: currentDay,
+      amount: 0,
+      category: "",
+      content: ""
+    });
   }
 
 
