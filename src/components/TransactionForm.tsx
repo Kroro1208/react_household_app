@@ -155,10 +155,16 @@ const TransactionForm = ({
 
   useEffect(() => {
     if (selectedTransaction) {
+      const categoryExists = categories.some((category) => category.label === selectedTransaction.category)
+      setValue('category', categoryExists ? selectedTransaction.category : "");
+    }
+  }, [selectedTransaction, categories])
+
+  useEffect(() => {
+    if (selectedTransaction) {
       setValue('type', selectedTransaction.type);
       setValue('date', selectedTransaction.date);
       setValue('amount', selectedTransaction.amount);
-      setValue('category', selectedTransaction.category);
       setValue('content', selectedTransaction.content);
     } else {
       reset({
