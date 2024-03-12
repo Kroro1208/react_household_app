@@ -41,6 +41,7 @@ interface TransactionFormProps {
   selectedTransaction: Transaction | null;
   onDeleteTransaction: (transactionId: string) => Promise<void>
   setSelectedTransaction: React.Dispatch<React.SetStateAction<Transaction | null>>
+  onUpdateTransaction: (transaction: Schema, transactionId: string) => Promise<void>
 
 }
 
@@ -66,7 +67,8 @@ const TransactionForm = ({
   onSaveTransaction,
   selectedTransaction,
   onDeleteTransaction,
-  setSelectedTransaction
+  setSelectedTransaction,
+  onUpdateTransaction
 }: TransactionFormProps) => {
   // const { control, handleSubmit, formState: { errors } } = useForm<IFormInput>({
   const { control, setValue, watch, handleSubmit, formState: { errors }, reset } = useForm<Schema>({
@@ -126,7 +128,22 @@ const TransactionForm = ({
 
   // 送信処理ボタン
   const onSubmit: SubmitHandler<Schema> = (data) => {
-    onSaveTransaction(data);
+    if (selectedTransaction) {
+      onUpdateTransaction(data, selectedTransaction.id).then(() => {
+        console.log("取引を更新しました");
+        setSelectedTransaction(null);
+      }).catch((error: any) => {
+        console.error(error);
+      })
+    } else {
+      onSaveTransaction(data).then(() => {
+        console.log("取引を登録しました");
+      }).catch((error: any) => {
+        console.error(error);
+      })
+
+    }
+
     reset({
       type: "expense",
       date: currentDay,
@@ -288,7 +305,7 @@ const TransactionForm = ({
 
           {/* 保存ボタン */}
           <Button type="submit" variant="contained" color={"success"} fullWidth>
-            保存
+            {selectedTransaction ? "更新" : "保存"}
           </Button>
 
           {selectedTransaction && (

@@ -9,7 +9,7 @@ import { theme } from './theme/theme';
 import { CssBaseline } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Transaction } from "./types/index";
-import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { db } from "./firebase";
 import { formatMonth } from './utils/formatting';
 import { Schema } from './validations/schema';
@@ -93,6 +93,25 @@ function App() {
     }
   }
 
+  const onUpdateTransaction = async (transaction: Schema, transactionId: string) => {
+    try {
+      // firebaseの更新メソッド
+      const docRef = doc(db, "Transactions", transactionId); // 更新対象を取得
+      await updateDoc(docRef, transaction); // 更新
+      // 選択されたidとstateで管理されているidが一致する場合に更新する
+      const updatedTransactions = transactions.map((t) => t.id === transactionId ? { ...t, ...transaction } : t) as Transaction[];
+      setTransactions(updatedTransactions);
+    } catch (error) {
+      if (isFireStoreError(error)) {
+        console.error('firestore エラー:', error);
+      } else {
+        console.error('一般エラー:', error);
+      };
+    }
+  }
+
+
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -105,6 +124,7 @@ function App() {
                 setCurrentMonth={setCurrentMonth}
                 onSaveTransaction={onSaveTransaction}
                 onDeleteTransaction={onDeleteTransaction}
+                onUpdateTransaction={onUpdateTransaction}
               />} />
             <Route path="/report" element={<Report />} />
             <Route path="*" element={<NotFound />} />
