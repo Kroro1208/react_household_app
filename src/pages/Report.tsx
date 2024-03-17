@@ -8,10 +8,11 @@ import { Transaction } from "../types"
 interface ReportProps {
   currentMonth: Date;
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
-  monthlyTransactions: Transaction[]
+  monthlyTransactions: Transaction[];
+  isLoading: boolean
 }
 
-const Report = ({ currentMonth, setCurrentMonth, monthlyTransactions }: ReportProps) => {
+const Report = ({ currentMonth, setCurrentMonth, monthlyTransactions, isLoading }: ReportProps) => {
 
   const commonPaperStyle = {
     height: { xs: "auto", md: "400px" },
@@ -29,7 +30,7 @@ const Report = ({ currentMonth, setCurrentMonth, monthlyTransactions }: ReportPr
         <Paper sx={commonPaperStyle}><CategoryChart /></Paper>
       </Grid>
       <Grid item xs={12} md={8}>
-        <Paper sx={commonPaperStyle}><BarChart monthlyTransactions={monthlyTransactions} /></Paper>
+        <Paper sx={commonPaperStyle}><BarChart monthlyTransactions={monthlyTransactions} isLoading={isLoading}/></Paper>
       </Grid>
       <Grid item xs={12}>
         <TransactionTable />

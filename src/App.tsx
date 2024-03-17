@@ -23,6 +23,7 @@ function App() {
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(true);
 
   // Firebaseからデータを取得
   useEffect(() => {
@@ -45,6 +46,8 @@ function App() {
         } else {
           console.log("一般的なエラー:", error);
         }
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchTransactions();
@@ -126,7 +129,7 @@ function App() {
                 onDeleteTransaction={onDeleteTransaction}
                 onUpdateTransaction={onUpdateTransaction}
               />} />
-            <Route path="/report" element={<Report currentMonth={currentMonth} setCurrentMonth={setCurrentMonth} monthlyTransactions={monthlyTransactions}/>} />
+            <Route path="/report" element={<Report isLoading={isLoading} currentMonth={currentMonth} setCurrentMonth={setCurrentMonth} monthlyTransactions={monthlyTransactions} />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
