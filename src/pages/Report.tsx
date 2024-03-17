@@ -15,12 +15,13 @@ const Report = ({ currentMonth, setCurrentMonth }: ReportProps) => {
     height: { xs: "auto", md: "400px" },
     display: "flex",
     flexDirection: "column",
+    p: 2
   }
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <MonthSelector currentMonth={currentMonth} setCurrentMonth={setCurrentMonth}/>
+        <MonthSelector currentMonth={currentMonth} setCurrentMonth={setCurrentMonth} />
       </Grid>
       <Grid item xs={12} md={4}>
         <Paper sx={commonPaperStyle}><CategoryChart /></Paper>
