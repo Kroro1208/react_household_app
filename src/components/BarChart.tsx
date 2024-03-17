@@ -7,7 +7,10 @@ import {
     Title,
     Tooltip,
     Legend,
+    ChartData,
 } from 'chart.js';
+import { Transaction } from '../types';
+import { calcDailyBalance } from '../utils/financeCalc';
 
 
 ChartJS.register(
@@ -19,7 +22,11 @@ ChartJS.register(
     Legend
 );
 
-const BarChart = () => {
+interface BarChartProps {
+    monthlyTransactions: Transaction[];
+}
+
+const BarChart = ({ monthlyTransactions }: BarChartProps) => {
     const options = {
         maintainAspectRatio: false,
         responsive: true,
@@ -33,18 +40,25 @@ const BarChart = () => {
             },
         },
     };
-    const labels = ['2024-01-10', '2024-01-10', '2024-01-10', '2024-01-10', '2024-01-10', '2024-01-10', '2024-01-10'];
-    const data = {
-        labels,
+
+    const dailyBalances = calcDailyBalance(monthlyTransactions);
+
+    const dateLabels = Object.keys(dailyBalances);
+    const expenseData = dateLabels.map((day) => dailyBalances[day].expense)
+    const incomeData = dateLabels.map((day) => dailyBalances[day].income)
+
+
+    const data: ChartData<"bar"> = {
+        labels: dateLabels,
         datasets: [
             {
                 label: '収入',
-                data: [100, 200, 300, 400, 500, 600, 700],
+                data: incomeData,
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
             {
                 label: '支出',
-                data: [100, 200, 300, 400, 500, 600, 700],
+                data: expenseData,
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
             },
         ],

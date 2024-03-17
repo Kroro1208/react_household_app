@@ -126,7 +126,7 @@ function App() {
                 onDeleteTransaction={onDeleteTransaction}
                 onUpdateTransaction={onUpdateTransaction}
               />} />
-            <Route path="/report" element={<Report currentMonth={currentMonth} setCurrentMonth={setCurrentMonth}/>} />
+            <Route path="/report" element={<Report currentMonth={currentMonth} setCurrentMonth={setCurrentMonth} monthlyTransactions={monthlyTransactions}/>} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
