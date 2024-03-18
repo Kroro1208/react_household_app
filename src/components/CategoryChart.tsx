@@ -39,7 +39,7 @@ const CategoryChart = () => {
   };
 
   return (
-    <Box sx={{ width: 300, height: 300}}>
+    <Box sx={{ width: '300px', height: '300px', marginX: 'auto', paddingTop: '5px' }}>
       {/* <TextField label="収支の種類" select fullWidth value={selectedType} onChange={handleChange}>
         <MenuItem value={"income"}>収入</MenuItem>
         <MenuItem value={"expense"}>支出</MenuItem>
