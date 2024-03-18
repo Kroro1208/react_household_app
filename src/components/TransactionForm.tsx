@@ -2,9 +2,13 @@ import {
   Box,
   Button,
   ButtonGroup,
+  FormControl,
+  FormHelperText,
   IconButton,
+  InputLabel,
   ListItemIcon,
   MenuItem,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -267,19 +271,44 @@ const TransactionForm = ({
             name="category"
             control={control}
             render={({ field }) => (
-              <TextField
-                error={!!errors.category}
-                helperText={errors.category?.message}
-                {...field} id="カテゴリ" label="カテゴリ" select>
-                {categories.map((category, index) => (
-                  <MenuItem value={category.label} key={index}>
-                    <ListItemIcon>
-                      {category.icon}
-                    </ListItemIcon>
-                    {category.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+              // <TextField
+              //   select
+              //   error={!!errors.category}
+              //   helperText={errors.category?.message}
+              //   {...field} id="カテゴリ" label="カテゴリ"
+              // InputLabelProps={{
+              //   htmlFor: "category"
+              // }}
+              // inputProps={{id: "category"}}
+              // >
+              //   {categories.map((category, index) => (
+              //     <MenuItem value={category.label} key={index}>
+              //       <ListItemIcon>
+              //         {category.icon}
+              //       </ListItemIcon>
+              //       {category.label}
+              //     </MenuItem>
+              //   ))}
+              // </TextField>
+              <FormControl fullWidth error={!!errors.category}>
+                <InputLabel id="category-select-label">カテゴリ</InputLabel>
+                <Select
+                  {...field}
+                  labelId='category-select-label'
+                  id="category-select"
+                  label="カテゴリ"
+                >
+                  {categories.map((category, index) => (
+                    <MenuItem value={category.label} key={index}>
+                      <ListItemIcon>
+                        {category.icon}
+                      </ListItemIcon>
+                      {category.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>{errors.category?.message}</FormHelperText>
+              </FormControl>
             )}
           />
           {/* 金額 */}
